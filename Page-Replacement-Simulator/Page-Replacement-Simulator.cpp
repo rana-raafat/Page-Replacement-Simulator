@@ -83,7 +83,7 @@ void optimal(int reference_string[], int string_length, vector<int>& frames, int
             frames.push_back(reference_string[page_index]);
         }
         // else fetches victim_index frame to replace page with
-        else {                                                                  
+        else {             
             int victim_index = predict(reference_string, string_length, frames, page_index);
             frames[victim_index] = reference_string[page_index];
         }
@@ -113,7 +113,7 @@ bool search_frames(int page, vector<int>& frames)
 int predict(int reference_string[], int string_length, vector<int>& frames, int current_page_refernce_index)
 {
     // will later be updated with index of page reference least recently used in future
-    // initially is first index from which to be used in the future
+    // initially is first index of page reference string from which to be used in the future
     int farthest_used_index = current_page_refernce_index + 1;
 
     // may also be updated later, initially is the first frame 
@@ -125,18 +125,25 @@ int predict(int reference_string[], int string_length, vector<int>& frames, int 
     for (int frame_index = 0; frame_index < frames.size(); frame_index++) {
         // with future references
         for (reference_index = current_page_refernce_index + 1; reference_index < string_length; reference_index++) {
+            // if frame value is found in the hereafter referenced pages 
             if (frames[frame_index] == reference_string[reference_index]) {
+                // and page is placed farther than the current farthest position
                 if (reference_index > farthest_used_index) {
+                    // farthest position is updated
                     farthest_used_index = reference_index;
+                    // frame is set as the newly chosen victim
                     victim_index = frame_index;
                 }
+                // if it's found but is NOT placed farther than the current farthest, we move on onto the next frame
                 break;
             }
         }
-        // in case frame is never referenced in the future
-        if (reference_index == string_length)
-            return frame_index;
+        // in case frame is never referenced in the future, it is returned as victim without the need for further checking
+        if (reference_index == string_length) {
+                return frame_index;
+        }
     }
 
+    // return victim chosen by end of iterations
     return victim_index;
 }
