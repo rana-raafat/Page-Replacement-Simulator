@@ -1,2 +1,7 @@
 ﻿  Page-Replacement-Simulator.cpp
-LINK : fatal error LNK1104: cannot open file 'F:\junior cs\Fall'21\Operating Systems II\PROJECT\Page-Replacement-Simulator\x64\Release\Page-Replacement-Simulator.exe'
+  Generating code
+  0 of 147 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  Page-Replacement-Simulator.vcxproj -> F:\junior cs\Fall'21\Operating Systems II\PROJECT\Page-Replacement-Simulator\x64\Release\Page-Replacement-Simulator.exe

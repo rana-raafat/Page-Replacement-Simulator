@@ -66,7 +66,7 @@ int main()
 void optimal(int reference_string[], int string_length, vector<int>& frames, int frames_number)
 {
     int page_fault = 0;
-    // Traverses through page reference string, checks if miss and hit and apply procedure accordingly
+    // Traverses through page reference string, checks if miss or hit and apply procedure accordingly
     for (int page_index = 0; page_index < string_length; page_index++) {
         // search() will return TRUE if page is found in one of the frames : Page Hit
         if (search_frames(reference_string[page_index], frames)) {
@@ -80,9 +80,10 @@ void optimal(int reference_string[], int string_length, vector<int>& frames, int
 
         // If there are free frames
         if (frames.size() < frames_number) {
+            // insert page reference
             frames.push_back(reference_string[page_index]);
         }
-        // else fetches victim_index frame to replace page with
+        // else fetches victim frame index to replace the desired page reference into
         else {             
             int victim_index = predict(reference_string, string_length, frames, page_index);
             frames[victim_index] = reference_string[page_index];
@@ -113,7 +114,7 @@ bool search_frames(int page, vector<int>& frames)
 int predict(int reference_string[], int string_length, vector<int>& frames, int current_page_refernce_index)
 {
     // will later be updated with index of page reference least recently used in future
-    // initially is first index of page reference string from which to be used in the future
+    // initially is first position of page reference string from which to be used in the future
     int farthest_used_index = current_page_refernce_index + 1;
 
     // may also be updated later, initially is the first frame 
