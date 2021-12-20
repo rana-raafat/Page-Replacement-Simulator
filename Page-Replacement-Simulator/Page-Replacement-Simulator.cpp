@@ -17,6 +17,7 @@ int predict(int[], int, vector<int>&, int);
 //shared functions
 bool search_frames(int, vector<int>&);
 void printResult(int, vector<int>&);
+void printString(int[], int);
 
 int main()
 {
@@ -43,18 +44,22 @@ int main()
     cin >> algo;
 
     while (true) {
+        
         if (algo == "FIFO") {
             cout << "\n______________________________________________________________________________________________________________________\n\n";
+            printString(reference_string, string_length);
             fifo(reference_string, string_length, frames, frames_number);
             break;
         }
         else if (algo == "LRU") {
             cout << "\n______________________________________________________________________________________________________________________\n\n";
+            printString(reference_string, string_length);
             lru(reference_string, string_length, frames, frames_number);
             break;
         }
         else if (algo == "optimal") {
             cout << "\n______________________________________________________________________________________________________________________\n\n";
+            printString(reference_string, string_length);
             optimal(reference_string, string_length, frames, frames_number);
             break;
         }
@@ -100,9 +105,6 @@ int victimFrameFIFO(vector<int>& frames, vector<int>& counter) {
     int victim = 0, max = counter[0];
     for (unsigned i = 0; i < frames.size(); i++) {
         if (frames[i] == 0) {
-            for (int j = i; j >= 0; j--) {
-                counter[j]++;
-            }
             return i;
         }
     }
@@ -160,9 +162,6 @@ void lru(int reference_string[], int string_length, vector<int>& frames, int fra
 int victimFrameLRU(vector<int>& frames, vector<int>& counter) {
     for (unsigned i = 0; i < frames.size(); i++) { //finding an empty frame
         if (frames[i] == 0) {
-            for (int j = i; j >= 0; j--) {
-                counter[j]++;
-            }
             return i;
         }
     }
@@ -277,4 +276,15 @@ void printResult(int pageFaults, vector<int>& frames) {
         }
     }
     cout << " ]" << endl;
+}
+
+void printString(int reference_string[], int string_length) {
+    cout << "The reference string is { ";
+    for (int page_index = 0; page_index < string_length; page_index++) {
+        cout << reference_string[page_index];
+        if (page_index != string_length - 1) {
+            cout << " , ";
+        }
+    }
+    cout << " }\n\n";
 }

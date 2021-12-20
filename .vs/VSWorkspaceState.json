@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Page-Replacement-Simulator"
   ],
-  "SelectedNode": "\\Page-Replacement-Simulator.sln",
+  "SelectedNode": "\\Page-Replacement-Simulator\\Page-Replacement-Simulator.cpp",
   "PreviewInSolutionExplorer": false
 }
