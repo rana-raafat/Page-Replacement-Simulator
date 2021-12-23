@@ -11,8 +11,8 @@ void lru(int[], int, vector<int>&, int, vector<int>&);
 int victimFrameLRU(vector<int>&, vector<int>&);
 
 //optimal headers
-void optimal(int[], int, vector<int>&, int);
-int optimal_victim(int[], int, vector<int>&, int);
+void optimal(int[], int, vector<int>&, int, vector<int>&);
+int optimal_victim(int[], int, vector<int>&, int, vector<int>&);
 
 //shared functions
 void printString(int[], int);
@@ -61,7 +61,7 @@ int main()
         else if (algo == "optimal") {
             cout << "\n______________________________________________________________________________________________________________________\n\n";
             printString(reference_string, string_length);
-            optimal(reference_string, string_length, frames, frames_number);
+            optimal(reference_string, string_length, frames, frames_number, counter);
             break;
         }
         else {
@@ -166,7 +166,7 @@ int victimFrameLRU(vector<int>& frames, vector<int>& counter) {
 }
 //------------------------------------------------- OPTIMAL FUNCTIONS ------------------------------------------------//
 
-void optimal(int reference_string[], int string_length, vector<int>& frames, int frames_number)
+void optimal(int reference_string[], int string_length, vector<int>& frames, int frames_number, vector<int>& counter)
 {
     int page_fault = 0;
     // Traverses through page reference string, checks if miss or hit and apply procedure accordingly
@@ -182,10 +182,15 @@ void optimal(int reference_string[], int string_length, vector<int>& frames, int
         page_fault++;
 
         // fetches free frame or victim frame index to replace the desired page reference into
-        int victim_index = optimal_victim(reference_string, string_length, frames, page_index);
+        int victim_index = optimal_victim(reference_string, string_length, frames, page_index, counter);
         frames[victim_index] = reference_string[page_index];
 
         printResult(page_fault, false, frames);
+
+        for (unsigned j = 0; j < counter.size(); j++) {
+            if (frames[j] != -1)
+                counter[j]++;
+        }
     }
 
     printResult(page_fault, true, frames);
@@ -196,7 +201,7 @@ void optimal(int reference_string[], int string_length, vector<int>& frames, int
 
 /* Function that checks which frame will not be referenced recently in the future- that
    frame is declared the victim according to the optimal page replacement algorithm...  */
-int optimal_victim(int reference_string[], int string_length, vector<int>& frames, int current_page_refernce_index)
+int optimal_victim(int reference_string[], int string_length, vector<int>& frames, int current_page_refernce_index, vector<int>& counter)
 {
 
     // If there are empty frames
@@ -213,10 +218,14 @@ int optimal_victim(int reference_string[], int string_length, vector<int>& frame
     // initially is first position in page reference string from which to be used in the future
     int farthest_used_index = current_page_refernce_index + 1;
 
-    // may also be updated later, initially is the first frame 
+    // will be updated later
     int victim_index = 0;
 
+    // nested for loop iteration index
     int reference_index;
+
+    vector<int> possible_victims;
+    vector<int> possible_victims_counter;
 
     // compares each frame value
     for (int frame_index = 0; frame_index < frames.size(); frame_index++) {
@@ -235,12 +244,33 @@ int optimal_victim(int reference_string[], int string_length, vector<int>& frame
                 break;
             }
         }
-        // in case frame is never referenced in the future, it is returned as victim without the need for further checking
+        // in case frame is never referenced in the future
         if (reference_index == string_length) {
-            return frame_index;
+
+            possible_victims.push_back(frames[frame_index]);
+            possible_victims_counter.push_back(counter[frame_index]);
+
+            // if there's another frame previously detected that is also never referenced in the future
+            if (farthest_used_index == string_length + 1) {
+                int temp_index = victimFrameFIFO(possible_victims, possible_victims_counter);
+                for (unsigned i = 0; i < frames.size(); i++) {
+                    if (frames[i] == possible_victims[temp_index]) {
+                        victim_index = i;
+                        break;
+                    }
+                }
+            }
+            //else no need to check
+            else{
+                victim_index = frame_index;
+                farthest_used_index = string_length + 1;
+            }
         }
     }
-    // return victim chosen by end of iterations
+
+    counter[victim_index] = 0;
+
+    // return victim by end of iterations
     return victim_index;
 }
 
