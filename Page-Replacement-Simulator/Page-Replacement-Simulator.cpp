@@ -21,16 +21,30 @@ void printResult(int, bool, vector<int>&);
 
 int main()
 {
-    cout << "Enter number of frames: \n";
     int frames_number;
-    cin >> frames_number;
+    while (true) {
+        cout << "Enter number of frames: \n";
+        cin >> frames_number;
+        if (frames_number > 0) {
+            break;
+        }
+        else
+            cout << "\nMust be a positive number, try again.\n\n";
+    }
 
     vector<int> frames(frames_number, -1); //initially empty
     vector<int> counter(frames_number, 0); //initially empty
 
-    cout << "\nEnter length of page reference string :\n";
     int string_length;
-    cin >> string_length;
+    while (true) {
+        cout << "\nEnter length of page reference string :\n";
+        cin >> string_length;
+        if (string_length > 0) {
+            break;
+        }
+        else
+            cout << "\nMust be a positive number, try again.\n\n";
+    }
 
     cout << "\nEnter page reference string :\n";
     int* reference_string = new int[string_length];
